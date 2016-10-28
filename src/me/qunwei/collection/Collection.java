@@ -1,5 +1,7 @@
-package me.qunwei.define;
+package me.qunwei.collection;
 
+
+import me.qunwei.iterator.Iterator;
 
 /**
  * Created by Administrator on 2016/10/20.
