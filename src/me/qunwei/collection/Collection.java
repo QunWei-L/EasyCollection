@@ -27,7 +27,8 @@ public interface Collection<T> {
 
     Object[] toArray();
 
-    <T> T[] toArray(T[] target);
+    //reduce the complex
+//    <T> T[] toArray(T[] target);
 
 
     //TODO: add the operations for all collection,such as containsAll(Conllection<T> collection)
