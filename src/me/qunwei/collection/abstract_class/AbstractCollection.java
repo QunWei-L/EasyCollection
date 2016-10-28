@@ -1,5 +1,6 @@
-package me.qunwei.collection;
+package me.qunwei.collection.abstract_class;
 
+import me.qunwei.collection.Collection;
 import me.qunwei.iterator.Iterator;
 
 import java.util.Arrays;
