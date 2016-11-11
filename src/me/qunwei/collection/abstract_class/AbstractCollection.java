@@ -1,14 +1,14 @@
 package me.qunwei.collection.abstract_class;
 
 import me.qunwei.collection.Collection;
-import me.qunwei.iterator.Iterator;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * Created by QunWei on 2016/10/27.
  */
-public abstract class AbstractCollection implements Collection {
+public abstract class AbstractCollection<E> implements Collection<E> {
 
 
     @Override

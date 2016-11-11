@@ -1,12 +1,12 @@
 package me.qunwei.collection;
 
 
-import me.qunwei.iterator.Iterator;
+import java.util.Iterator;
 
 /**
  * Created by Administrator on 2016/10/20.
  */
-public interface Collection<T> {
+public interface Collection<T> extends Iterable{
 
     // basic operations
 

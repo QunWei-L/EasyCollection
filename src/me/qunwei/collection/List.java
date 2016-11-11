@@ -20,6 +20,8 @@ public interface List<E> extends Collection<E>{
 
     E remove(int index);
 
+    E get(int index);
+
     /**
      * @param element
      * @return the index of first occurrence
