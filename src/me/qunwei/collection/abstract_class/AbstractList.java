@@ -3,7 +3,7 @@ package me.qunwei.collection.abstract_class;
 import me.qunwei.collection.List;
 import me.qunwei.iterator.ListIterator;
 
-import java.lang.management.ThreadInfo;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -18,26 +18,21 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     protected AbstractList() {
     }
 
-    @Override
     public boolean add(E element) {
         return add(size(), element);
     }
 
-    @Override
     public boolean add(int index, E element) {
         throw new UnsupportedOperationException("This method should be implement by subclass");
     }
 
-    @Override
     public E remove(int index) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     abstract public E get(int index);
 
 
-    @Override
     public int indexOf(E o) {
 
         ListIterator<E> it = ListIterator();
@@ -54,23 +49,21 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
         return -1;
     }
 
-    @Override
     public int lastIndexOf(E o) {
         ListIterator<E> it = ListIterator(size());
         if (o == null) {
             while (it.hasPrevious())
-                if (it.Previous() == null)
+                if (it.previous() == null)
                     return it.nextIndex();
         } else {
             while (it.hasPrevious())
-                if (o.equals(it.Previous()))
+                if (o.equals(it.previous()))
                     return it.nextIndex();
         }
 
         return -1;
     }
 
-    @Override
     public Iterator<E> iterator() {
         return new Itr();
     }
@@ -115,9 +108,9 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     }
 
     private class Itr implements Iterator<E> {
-        private int cusor = 0;
-        private int lastRet = -1;
-        private int expectedModCount = modCount;
+        int cursor = 0;
+        int lastRet = -1;
+        int expectedModCount = modCount;
 
         @Override
         public void remove() {
@@ -126,19 +119,19 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
             checkForComodification();
             try {
                 AbstractList.this.remove(lastRet);
-                if (lastRet<cusor){
-                    cusor--;
+                if (lastRet < cursor) {
+                    cursor--;
                 }
                 lastRet = -1;
                 expectedModCount = modCount;
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }
         }
 
         @Override
         public boolean hasNext() {
-            return cusor != size();
+            return cursor != size();
         }
 
         @Override
@@ -148,19 +141,85 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
             checkForComodification();
 
             try {
-                int i = cusor;
+                int i = cursor;
                 E next = get(i);
-                cusor = i + 1;
+                cursor = i + 1;
                 return next;
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 checkForComodification();
                 throw new NoSuchElementException();
             }
         }
 
-        private void checkForComodification() {
+        void checkForComodification() {
             if (modCount != expectedModCount)
                 throw new ConcurrentModificationException();
+        }
+    }
+
+
+    private class ListItr extends Itr implements ListIterator<E> {
+        public ListItr(int index) {
+            cursor = index;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursor != 0;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursor - 1;
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursor;
+        }
+
+        @Override
+        public E previous() {
+            checkForComodification();
+            try {
+                int i = cursor - 1;
+                E previous = get(i);
+                lastRet = cursor = i;
+                return previous;
+            } catch (IndexOutOfBoundsException e) {
+                checkForComodification();
+                throw new NoSuchElementException();
+            }
+        }
+
+
+        @Override
+        public void add(E e) {
+            checkForComodification();
+
+            try {
+                int i = cursor;
+                AbstractList.this.add(i, e);
+                lastRet = -1;
+                cursor = i + 1;
+                expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
+        }
+
+        @Override
+        public void set(E e) {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            checkForComodification();
+
+            try {
+                AbstractList.this.set(lastRet, e);
+                expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 

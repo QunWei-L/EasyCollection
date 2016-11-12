@@ -9,11 +9,11 @@ public interface ListIterator<E> extends Iterator<E>{
     boolean hasNext();
 
     boolean hasPrevious();
-    E Previous();
+    E previous();
 
     int previousIndex();
     int nextIndex();
 
-    boolean add(E e);
-    boolean set(E e);
+    void add(E e);
+    void set(E e);
 }
